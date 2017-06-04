@@ -1,0 +1,6 @@
+project(FILESYS)
+set(APP_SRC main.cpp)
+set(LIB_SRC DirOp.cpp)
+add_library(lib_dir_op ${LIB_SRC})
+add_executable(filesys ${APP_SRC})
+target_link_libraries(filesys lib_dir_op)
