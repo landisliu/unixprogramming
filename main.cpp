@@ -1,32 +1,32 @@
-#include<stdlib.h>
-#include<dirent.h>
 #include<stdio.h>
-#include<string.h>
+#include"DirOp.h"
+void display_list(const std::list<std::string>& items)
+{
+	for(std::list<std::string>::const_iterator itr = items.begin(); itr != items.end(); ++itr)
+	{
+		printf("%s\n",(*itr).c_str());
+	}
+}
 int main(int argc, char* argv[])
 {
-	DIR* dir = NULL;
-	if( (dir = opendir(argv[1])) == NULL)
-	{
-		printf("open dir failed.");
-		return 0;
-	}
-	struct dirent* ptr = NULL;
+	DirOp dop(argv[1]);
+	std::list<std::string> files;
+	std::list<std::string> dirs;
+	dop.GetAllFiles(files, false);
+	display_list(files);
+	printf("_________________________________________________\n");
+	dop.GetAllSubDirs(dirs, false);
+	display_list(dirs);
 	
-	while((ptr = readdir(dir)) != NULL)
-	{
-		if(strcmp(ptr->d_name, ".")==0 || strcmp(ptr->d_name, "..")==0)
-		{
-			continue;
-		}
-		else if(ptr->d_type == 8)
-		{
-			printf("file name:%s\n",ptr->d_name);
-		}
-		else if(ptr->d_type == 4)
-		{
-			printf("dir name:%s\n",ptr->d_name);
-		}
-	}
-	closedir(dir);
+	printf("__________________________________________________\n");
+
+	files.clear();
+	dirs.clear();
+	dop.GetAllFiles(files,true);
+	display_list(files);
+	printf("_________________________________________________\n");
+	dop.GetAllSubDirs(dirs,true);
+	display_list(dirs);
+
 	return 0;
 }
